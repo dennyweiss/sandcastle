@@ -99,6 +99,17 @@ export interface DockerOptions {
    * When omitted, no `--device` flags are added.
    */
   readonly devices?: readonly string[];
+  /**
+   * Limit the CPU resources available to the container, via `--cpus`.
+   *
+   * Maps directly to `docker run --cpus`. Accepts fractional values:
+   *
+   * - `2` → `--cpus 2` (at most 2 CPUs)
+   * - `1.5` → `--cpus 1.5` (at most 1.5 CPUs)
+   *
+   * When omitted, no `--cpus` flag is added and the container is unconstrained.
+   */
+  readonly cpus?: number;
 }
 
 /**
@@ -169,6 +180,7 @@ export const docker = (options?: DockerOptions): SandboxProvider => {
             network: options?.network,
             groups: options?.groups,
             devices: options?.devices,
+            cpus: options?.cpus,
             selinuxLabel,
           },
         ),

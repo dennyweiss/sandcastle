@@ -83,6 +83,8 @@ export interface StartContainerOptions {
   readonly groups?: readonly (string | number)[];
   /** Host devices to expose to the container. Passed as `--device` flags. */
   readonly devices?: readonly string[];
+  /** Limit CPU resources via `--cpus` (e.g. `1.5`). Fractional values allowed. */
+  readonly cpus?: number;
   /**
    * SELinux volume label suffix applied to bind mounts (default `"z"`).
    *
@@ -148,6 +150,8 @@ export const startContainer = (
       "--device",
       d,
     ]);
+    const cpusFlags =
+      options?.cpus !== undefined ? ["--cpus", String(options.cpus)] : [];
 
     yield* dockerExec([
       "run",
@@ -161,6 +165,7 @@ export const startContainer = (
       ...networkFlags,
       ...groupAddFlags,
       ...deviceFlags,
+      ...cpusFlags,
       imageName,
     ]);
   });
