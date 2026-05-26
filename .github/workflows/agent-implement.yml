@@ -69,15 +69,22 @@ jobs:
           existing=$(gh pr list \
             --state open \
             --search "in:body \"#${ISSUE_NUMBER}\"" \
-            --json number,url,body \
+            --json number,url,body,author \
             --jq "[.[] | select(.body | test(\"(?i)(closes|fixes|resolves)\\\\s+#${ISSUE_NUMBER}\\\\b\"))]")
           count=$(echo "$existing" | jq 'length')
-          if [ "$count" -gt 0 ]; then
-            echo "refused=true" >> "$GITHUB_OUTPUT"
-            echo "existing_pr_url=$(echo "$existing" | jq -r '.[0].url')" >> "$GITHUB_OUTPUT"
-          else
-            echo "refused=false" >> "$GITHUB_OUTPUT"
-          fi
+          refused=false
+          existing_pr_url=""
+          for i in $(seq 0 $((count - 1))); do
+            author=$(echo "$existing" | jq -r ".[$i].author.login")
+            # Only PRs from collaborators block the agent; outside contributors don't count.
+            if gh api "repos/${GH_REPO}/collaborators/${author}" --silent 2>/dev/null; then
+              refused=true
+              existing_pr_url=$(echo "$existing" | jq -r ".[$i].url")
+              break
+            fi
+          done
+          echo "refused=$refused" >> "$GITHUB_OUTPUT"
+          echo "existing_pr_url=$existing_pr_url" >> "$GITHUB_OUTPUT"
 
       - name: Refuse existing PR
         if: steps.preflight.outputs.refused == 'true'
