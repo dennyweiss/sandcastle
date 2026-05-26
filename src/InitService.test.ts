@@ -544,6 +544,20 @@ describe("InitService scaffold", () => {
       expect(prompt).not.toContain("{{BRANCH}}");
     });
 
+    it("implement-prompt.md hints the issue list is pre-filtered and discourages unfiltered re-query", async () => {
+      const dir = await makeDir();
+      await runScaffold(dir, { templateName: "sequential-reviewer" });
+
+      const prompt = await readFile(
+        join(dir, ".sandcastle", "implement-prompt.md"),
+        "utf-8",
+      );
+      expect(prompt).toContain(
+        "already been filtered to issues ready for work",
+      );
+      expect(prompt).toContain("Do not run your own unfiltered query");
+    });
+
     it("review-prompt.md contains {{BRANCH}} prompt argument", async () => {
       const dir = await makeDir();
       await runScaffold(dir, { templateName: "sequential-reviewer" });
@@ -1555,6 +1569,20 @@ describe("InitService scaffold", () => {
         "utf-8",
       );
       expect(prompt).not.toContain("GitHub issue");
+    });
+
+    it("simple-loop prompt hints the issue list is pre-filtered and discourages unfiltered re-query", async () => {
+      const dir = await makeDir();
+      await runScaffold(dir, { templateName: "simple-loop" });
+
+      const prompt = await readFile(
+        join(dir, ".sandcastle", "prompt.md"),
+        "utf-8",
+      );
+      expect(prompt).toContain(
+        "already been filtered to issues ready for work",
+      );
+      expect(prompt).toContain("Do not run your own unfiltered query");
     });
 
     // --- custom issue tracker ---
