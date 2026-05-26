@@ -316,14 +316,14 @@ if (closeResult.preservedWorktreePath) {
 
 #### `CreateSandboxOptions`
 
-| Option           | Type            | Default         | Description                                                          |
-| ---------------- | --------------- | --------------- | -------------------------------------------------------------------- |
-| `branch`         | string          | —               | **Required.** Explicit branch for the sandbox                        |
-| `sandbox`        | SandboxProvider | —               | **Required.** Sandbox provider (e.g. `docker()`, `podman()`)         |
-| `cwd`            | string          | `process.cwd()` | Host repo directory — relative paths resolve against `process.cwd()` |
-| `hooks`          | SandboxHooks    | —               | Lifecycle hooks (`host.*`, `sandbox.*`) — run once at creation time  |
-| `copyToWorktree` | string[]        | —               | Host-relative file paths to copy into the sandbox at creation time   |
-| `timeouts`       | Timeouts        | —               | Override default timeouts (e.g. `{ copyToWorktreeMs: 120_000 }`)     |
+| Option           | Type            | Default         | Description                                                                                                         |
+| ---------------- | --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `branch`         | string          | —               | **Required.** Explicit branch for the sandbox                                                                       |
+| `sandbox`        | SandboxProvider | —               | **Required.** Sandbox provider (e.g. `docker()`, `podman()`)                                                        |
+| `cwd`            | string          | `process.cwd()` | Host repo directory — relative paths resolve against `process.cwd()`                                                |
+| `hooks`          | SandboxHooks    | —               | Lifecycle hooks (`host.*`, `sandbox.*`) — run once at creation time                                                 |
+| `copyToWorktree` | string[]        | —               | Host-relative file paths to copy into the sandbox at creation time                                                  |
+| `timeouts`       | Timeouts        | —               | Override built-in lifecycle step timeouts (`copyToWorktreeMs`, `gitSetupMs`, `commitCollectionMs`, `mergeToHostMs`) |
 
 #### `Sandbox`
 
@@ -422,11 +422,11 @@ await sandbox.close();
 
 #### `CreateWorktreeOptions`
 
-| Option           | Type                   | Default | Description                                                               |
-| ---------------- | ---------------------- | ------- | ------------------------------------------------------------------------- |
-| `branchStrategy` | WorktreeBranchStrategy | —       | **Required.** `{ type: "branch", branch }` or `{ type: "merge-to-head" }` |
-| `copyToWorktree` | string[]               | —       | Host-relative file paths to copy into the worktree at creation time       |
-| `timeouts`       | Timeouts               | —       | Override default timeouts (e.g. `{ copyToWorktreeMs: 120_000 }`)          |
+| Option           | Type                   | Default | Description                                                                                                         |
+| ---------------- | ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
+| `branchStrategy` | WorktreeBranchStrategy | —       | **Required.** `{ type: "branch", branch }` or `{ type: "merge-to-head" }`                                           |
+| `copyToWorktree` | string[]               | —       | Host-relative file paths to copy into the worktree at creation time                                                 |
+| `timeouts`       | Timeouts               | —       | Override built-in lifecycle step timeouts (`copyToWorktreeMs`, `gitSetupMs`, `commitCollectionMs`, `mergeToHostMs`) |
 
 #### `Worktree`
 
@@ -486,12 +486,12 @@ await sandbox.close();
 
 #### `WorktreeCreateSandboxOptions`
 
-| Option           | Type            | Default | Description                                                         |
-| ---------------- | --------------- | ------- | ------------------------------------------------------------------- |
-| `sandbox`        | SandboxProvider | —       | **Required.** Sandbox provider (e.g. `docker()`)                    |
-| `hooks`          | SandboxHooks    | —       | Lifecycle hooks (`host.*`, `sandbox.*`)                             |
-| `copyToWorktree` | string[]        | —       | Host-relative file paths to copy into the worktree at creation time |
-| `timeouts`       | Timeouts        | —       | Override default timeouts (e.g. `{ copyToWorktreeMs: 120_000 }`)    |
+| Option           | Type            | Default | Description                                                                                                         |
+| ---------------- | --------------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
+| `sandbox`        | SandboxProvider | —       | **Required.** Sandbox provider (e.g. `docker()`)                                                                    |
+| `hooks`          | SandboxHooks    | —       | Lifecycle hooks (`host.*`, `sandbox.*`)                                                                             |
+| `copyToWorktree` | string[]        | —       | Host-relative file paths to copy into the worktree at creation time                                                 |
+| `timeouts`       | Timeouts        | —       | Override built-in lifecycle step timeouts (`copyToWorktreeMs`, `gitSetupMs`, `commitCollectionMs`, `mergeToHostMs`) |
 
 ## How it works
 
