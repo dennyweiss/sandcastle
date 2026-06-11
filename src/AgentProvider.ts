@@ -919,7 +919,10 @@ export const opencode = (
   buildInteractiveArgs({ prompt }: AgentCommandOptions): string[] {
     const args = ["opencode", "--model", model];
     if (options?.agent) args.push("--agent", options.agent);
-    if (prompt) args.push("-p", prompt);
+    // The TUI's seed-prompt flag is `--prompt` (long form only); `-p` is the
+    // `opencode run`/`attach` basic-auth password flag, not a prompt seed.
+    // Pre-fills the textbox but does not auto-submit (sst/opencode#3937).
+    if (prompt) args.push("--prompt", prompt);
     return args;
   },
 

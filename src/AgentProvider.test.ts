@@ -1326,7 +1326,7 @@ describe("opencode factory", () => {
       "opencode/big-pickle",
       "--agent",
       "build",
-      "-p",
+      "--prompt",
       "do something",
     ]);
   });
