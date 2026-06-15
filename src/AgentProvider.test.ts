@@ -2576,8 +2576,10 @@ describe("sessionStorage", () => {
         readFile(join(hostSubagentsDir, "agent-bad.jsonl"), "utf-8"),
       ).rejects.toThrow();
 
-      // Exactly one warning emitted, naming the bad path.
-      expect(errors.some((m) => m.includes("agent-bad.jsonl"))).toBe(true);
+      // Exactly one warning emitted, naming the bad path — successful
+      // siblings and the main session must not produce warnings of their own.
+      expect(errors).toHaveLength(1);
+      expect(errors[0]).toContain("agent-bad.jsonl");
     } finally {
       await rm(hostDir, { recursive: true, force: true });
       await rm(sandboxDir, { recursive: true, force: true });
